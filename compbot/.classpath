@@ -2,5 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/lucas/Workspace/ita/ctc-15/poker/dev/resources/pokerserver-2.3.1/thirdparty/activation.jar"/>
+	<classpathentry kind="lib" path="/Users/lucas/Workspace/ita/ctc-15/poker/dev/resources/pokerserver-2.3.1/thirdparty/mailapi.jar"/>
+	<classpathentry kind="lib" path="/Users/lucas/Workspace/ita/ctc-15/poker/dev/resources/pokerserver-2.3.1/thirdparty/meerkat-api.jar"/>
+	<classpathentry kind="lib" path="/Users/lucas/Workspace/ita/ctc-15/poker/dev/resources/pokerserver-2.3.1/thirdparty/smtp.jar"/>
+	<classpathentry kind="lib" path="/Users/lucas/Workspace/ita/ctc-15/poker/dev/resources/pokersource/jakarta-oro-2.0.6.jar"/>
+	<classpathentry kind="lib" path="/Users/lucas/Workspace/ita/ctc-15/poker/dev/resources/pokersource/junit-3.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
