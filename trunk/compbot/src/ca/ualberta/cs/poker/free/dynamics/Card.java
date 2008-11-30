@@ -100,6 +100,7 @@ public class Card {
     }
     public Rank rank;
     public Suit suit;
+    
     /** Creates a new instance of Card */
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
@@ -261,7 +262,6 @@ public class Card {
     	int suitIndex = index / 13;
     	return new Card(Rank.toRank(rankIndex),Suit.toSuit(suitIndex));
     }
-    
     
     public int getIndexSuitMajor(){
 		return (suit.index * 13) + rank.index;

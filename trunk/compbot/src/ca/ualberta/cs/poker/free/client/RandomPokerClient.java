@@ -14,8 +14,9 @@ import java.security.*;
  * 
  * @author Martin Zinkevich
  */
-public class RandomPokerClient extends PokerClient {
+public class RandomPokerClient extends AdvancedPokerClient {
     SecureRandom random;
+    static double result;
     
     /**
      * Chooses an action uniformly at random using an internal secure random number generator.
@@ -29,6 +30,8 @@ public class RandomPokerClient extends PokerClient {
         } else {
             sendRaise();
         }
+        
+        result = state.bankroll;
     }
     
     /** 
@@ -49,6 +52,8 @@ public class RandomPokerClient extends PokerClient {
         rpc.connect(InetAddress.getByName(args[0]),Integer.parseInt(args[1]));
         System.out.println("Successful connection!");
         rpc.run();
+        
+        System.out.printf("\nbankroll: %lf",result);        
     }
     
 }

@@ -6,6 +6,9 @@
 
 package ca.ualberta.cs.poker.free.client;
 
+import java.io.IOException;
+import java.net.SocketException;
+
 /**
  * An extension of PokerClient that contains a reference to a reproduction of what is happening on 
  * the server side (state).
@@ -25,7 +28,7 @@ public class AdvancedPokerClient extends PokerClient{
      * Handles the state change. 
      * Updates state and calls takeAction()
      */
-    public void handleStateChange(){
+    public void handleStateChange() throws IOException, SocketException{
         state.setFromMatchStateMessage(currentGameStateString);
         if (state.isOurTurn()){
             takeAction();
@@ -41,7 +44,7 @@ public class AdvancedPokerClient extends PokerClient{
     /**
      * Overload to take actions.
      */
-    public void takeAction(){
+    public void takeAction() throws SocketException, IOException{
         try{
             if (state.roundBets<4){
                 if (Math.random()<0.5){
