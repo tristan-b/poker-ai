@@ -24,13 +24,18 @@ public class HeuristicBotClient extends AdvancedPokerClient {
     }    
         
     public void takeAction() throws SocketException, IOException{        
-        dynamics.refreshOpponentLooseness();
-    	
-        if(dynamics.roundIndex == 0)
+
+        if(dynamics.roundIndex == 0){
+        	dynamics.assumedStrength = null;
         	sendAction(Heuristics.getInstance().preFlopBasedInGMGroups(dynamics));
-        else
+        }
+        	
+        else if(dynamics.roundIndex < 4)
         	sendAction(Heuristics.getInstance().posFlopBasedInEVAndSAIE(dynamics));
         
+        else{
+        	dynamics.refreshOpponentLooseness();
+        }
         if(dynamics.roundIndex == 4){
         	System.out.println("------------------------------ SHOWDOWN ------------------------------");
         	System.out.println(dynamics.bettingSequence + "::::" + dynamics.getCardState(2));
