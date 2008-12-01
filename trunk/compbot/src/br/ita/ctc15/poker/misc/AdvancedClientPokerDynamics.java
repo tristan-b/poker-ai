@@ -11,7 +11,8 @@ import ca.ualberta.cs.poker.free.dynamics.Card;
 
 public class AdvancedClientPokerDynamics extends ClientPokerDynamics {
     
-	double looseOpponentCoefficient = 0;
+	public double looseOpponentCoefficient = 0;
+	public double[] assumedStrength = new double[3];
 	
 	public double getExpectedValueAfterPreFlop() {
 		return (inPot[0] + inPot[1]) * getVictoryBeliefAfterPreFlop() + 
@@ -52,7 +53,8 @@ public class AdvancedClientPokerDynamics extends ClientPokerDynamics {
 	}
 	
 	public double getOpponentHandStrength() {
-		return getBoardDanger() * getOpponentsBet() / getOpponentsBluff();
+		assumedStrength[roundIndex-1] = getBoardDanger() * getOpponentsBet();
+		return assumedStrength[roundIndex-1] / getOpponentsBluff();
 	}	
 	
 	public double getBoardDanger() {
@@ -122,6 +124,36 @@ public class AdvancedClientPokerDynamics extends ClientPokerDynamics {
 	}
 	
 	public void refreshOpponentLooseness(){
-		looseOpponentCoefficient = 0;
+		HoldemBeliefVector heroHand;
+		HoldemBeliefVector opponentHand;
+		long board;
+		double equity[] = new double[2];
+		
+		//Flop
+		opponentHand = new HoldemBeliefVector("" + hole[1 - seatTaken][0] + hole[1 - seatTaken][1]);
+		heroHand = new HoldemBeliefVector("SM1 SM2 SM3 SM4 SM5 SM6 SM7 SM8 SM9");	//any card	
+		board = Deck.parseCardMask(this.board[0] + " " + this.board[1] + " " + this.board[2]); 
+		SAIE.FlopGameSAIE(Enumerate.GAME_HOLDEM, 0, 0, new BeliefVector[] {heroHand, opponentHand}, board, 0, equity, null);		
+		
+		if(equity[1] < assumedStrength[0])
+			looseOpponentCoefficient++;
+
+		//Turn
+		opponentHand = new HoldemBeliefVector("" + hole[1 - seatTaken][0] + hole[1 - seatTaken][1]);
+		heroHand = new HoldemBeliefVector("SM1 SM2 SM3 SM4 SM5 SM6 SM7 SM8 SM9");	//any card	
+		board = Deck.parseCardMask(this.board[0] + " " + this.board[1] + " " + this.board[2] + " " + this.board[3]); 
+		SAIE.FlopGameSAIE(Enumerate.GAME_HOLDEM, 0, 0, new BeliefVector[] {heroHand, opponentHand}, board, 0, equity, null);		
+		
+		if(equity[1] < assumedStrength[1])
+			looseOpponentCoefficient++;
+		
+		//River
+		opponentHand = new HoldemBeliefVector("" + hole[1 - seatTaken][0] + hole[1 - seatTaken][1]);
+		heroHand = new HoldemBeliefVector("SM1 SM2 SM3 SM4 SM5 SM6 SM7 SM8 SM9");	//any card	
+		board = Deck.parseCardMask(this.board[0] + " " + this.board[1] + " " + this.board[2] + " " + this.board[3] + " " + this.board[4]); 
+		SAIE.FlopGameSAIE(Enumerate.GAME_HOLDEM, 0, 0, new BeliefVector[] {heroHand, opponentHand}, board, 0, equity, null);		
+		
+		if(equity[1] < assumedStrength[2])
+			looseOpponentCoefficient++;
 	}
 }
