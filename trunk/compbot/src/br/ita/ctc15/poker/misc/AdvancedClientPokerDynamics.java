@@ -7,10 +7,11 @@ import org.pokersource.enumerate.SAIE;
 import org.pokersource.game.Deck;
 
 import ca.ualberta.cs.poker.free.client.ClientPokerDynamics;
+import ca.ualberta.cs.poker.free.dynamics.Card;
 
 public class AdvancedClientPokerDynamics extends ClientPokerDynamics {
     
-	double looseOpponentCoefficient;
+	double looseOpponentCoefficient = 0;
 	
 	public double getExpectedValueAfterPreFlop() {
 		return (inPot[0] + inPot[1]) * getVictoryBeliefAfterPreFlop() + 
@@ -59,23 +60,68 @@ public class AdvancedClientPokerDynamics extends ClientPokerDynamics {
 		int straightDanger = 0;
 		int flushDanger = 0;
 		int repeatedCards = 0;
+		int[] straightMask = new int[5];
+		int tmp;
 		
-		for(int i = 0; i < roundIndex + 1; i++)
+		for(int i = 0; i <= roundIndex + 1; i++)
 			if(board[i].getIndexRankMajor() > 35)
 				highCards++;
 		
-		for(int i = 0; i < roundIndex + 1; i++)
+		for(int i = 0; i <= roundIndex; i++)
+			for(int j = i + 1; i <= roundIndex + 1; i++){
+				if(board[i].suit.index == board[j].suit.index)
+					flushDanger++;
+				if(board[i].rank.index == board[j].rank.index)
+					repeatedCards++;
+			}
+
+		straightMask[0] = Card.Rank.ACE.index;
+		straightMask[1] = Card.Rank.TWO.index;
+		straightMask[2] = straightMask[1] + 1;
+		straightMask[3] = straightMask[1] + 2;
+		straightMask[4] = straightMask[1] + 3;
+		
+		for(int i = 0; i < 7; i++){
+			tmp = 0;
 			
-				highCards++;		
+			if(i == 1){
+				straightMask[0] = Card.Rank.TWO.index;
+				straightMask[1] = straightMask[0] + 1;
+				straightMask[2] = straightMask[0] + 2;
+				straightMask[3] = straightMask[0] + 3;
+				straightMask[4] = straightMask[0] + 4;				
+			}
+			else
+				for(int j = 0; j < 5; j++)
+					straightMask[j]++;
+			
+			for(int j = 0; j < 5; j++)
+				for(int k = 0; k <= roundIndex + 1; k++)
+					if(straightMask[j] == board[i].rank.index)
+						tmp++;
+			
+			straightDanger = Math.max(tmp, straightDanger);
+		}
+			
+		if(roundIndex == 3 && flushDanger < 3)
+			flushDanger = 0;
+
+		if(roundIndex == 3 && straightDanger < 3)
+			straightDanger = 0;		
 		
 		return (0.1*highCards + 0.2*straightDanger + 0.3*flushDanger + 0.4*repeatedCards)*0.2;
 	}
 	
 	public double getOpponentsBet() {
-		return 0.0;
+		return (bettingSequence.substring(bettingSequence.length() - 2, bettingSequence.length() - 1).equals("/c")) ? 0.5 : 
+			bettingSequence.length() - 1 == 'c' ? 0.75 : 1.0;
 	}
 	
 	public double getOpponentsBluff() {
-		return 0.0;
-	}	
+		return Math.tan((Math.PI/2)*looseOpponentCoefficient) + 1;
+	}
+	
+	public void refreshOpponentLooseness(){
+		looseOpponentCoefficient = 0;
+	}
 }
