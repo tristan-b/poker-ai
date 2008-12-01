@@ -36,7 +36,7 @@ public class TablePokerClient extends AdvancedPokerClient{
      */
     public void takeAction(){
         try{
-        String stateString = ""+state.seatTaken+":"+state.bettingSequence+":"+getBucket();
+        String stateString = ""+dynamics.seatTaken+":"+dynamics.bettingSequence+":"+getBucket();
         Vector<Double> distribution = table.get(stateString);
         if (distribution==null){
             sendCall();

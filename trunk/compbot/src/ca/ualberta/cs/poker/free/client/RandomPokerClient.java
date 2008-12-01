@@ -31,7 +31,7 @@ public class RandomPokerClient extends AdvancedPokerClient {
             sendRaise();
         }
         
-        result = state.bankroll;
+        result = dynamics.bankroll;
     }
     
     /** 

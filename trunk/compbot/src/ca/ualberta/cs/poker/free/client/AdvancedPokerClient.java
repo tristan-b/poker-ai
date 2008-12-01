@@ -9,6 +9,8 @@ package ca.ualberta.cs.poker.free.client;
 import java.io.IOException;
 import java.net.SocketException;
 
+import br.ita.ctc15.poker.misc.AdvancedClientPokerDynamics;
+
 /**
  * An extension of PokerClient that contains a reference to a reproduction of what is happening on 
  * the server side (state).
@@ -22,15 +24,15 @@ public class AdvancedPokerClient extends PokerClient{
     /**
      * A reproduction of what is happening on the server side.
      */
-    public ClientPokerDynamics state;
+    public AdvancedClientPokerDynamics dynamics;
     
     /** 
      * Handles the state change. 
      * Updates state and calls takeAction()
      */
     public void handleStateChange() throws IOException, SocketException{
-        state.setFromMatchStateMessage(currentGameStateString);
-        if (state.isOurTurn()){
+        dynamics.setFromMatchStateMessage(currentGameStateString);
+        if (dynamics.isOurTurn()){
             takeAction();
         }
     }
@@ -38,7 +40,7 @@ public class AdvancedPokerClient extends PokerClient{
      * Creates a new instance of AdvancedPokerClient. Must call connect(), then run() to start process 
      */
     public AdvancedPokerClient(){
-        state = new ClientPokerDynamics();
+        dynamics = new AdvancedClientPokerDynamics();
     }
     
     /**
@@ -46,7 +48,7 @@ public class AdvancedPokerClient extends PokerClient{
      */
     public void takeAction() throws SocketException, IOException{
         try{
-            if (state.roundBets<4){
+            if (dynamics.roundBets<4){
                 if (Math.random()<0.5){
                     sendRaise();
                 }  else {
