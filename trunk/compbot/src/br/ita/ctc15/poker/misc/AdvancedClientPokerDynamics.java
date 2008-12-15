@@ -156,4 +156,16 @@ public class AdvancedClientPokerDynamics extends ClientPokerDynamics {
 		if(equity[1] < assumedStrength[2])
 			looseOpponentCoefficient++;
 	}
+	
+	public int getNumberOfActionsInThisRound(char action){
+		String roundSequence = bettingSequence.substring(bettingSequence.lastIndexOf('/'));
+		int n = 0;
+		
+		for(int i = 0; i < roundSequence.length() - 1; i++)
+			if(roundSequence.charAt(i) == action)
+				n++;
+		
+		return n;
+	}
 }
+

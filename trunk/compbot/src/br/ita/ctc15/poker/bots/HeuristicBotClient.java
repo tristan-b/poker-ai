@@ -5,7 +5,7 @@ import java.net.*;
 import java.security.*;
 
 import br.ita.ctc15.poker.misc.AdvancedClientPokerDynamics;
-import br.ita.ctc15.poker.misc.Heuristics;
+import br.ita.ctc15.poker.ai.Heuristics;
 
 import ca.ualberta.cs.poker.free.client.AdvancedPokerClient;
 
