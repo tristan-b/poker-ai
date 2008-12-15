@@ -1,11 +1,11 @@
-package br.ita.ctc15.poker.misc;
+package br.ita.ctc15.poker.ai;
 
 import java.security.SecureRandom;
 
 import org.pokersource.enumerate.HoldemSMGroup;
 import org.pokersource.game.Deck;
 
-import ca.ualberta.cs.poker.free.dynamics.Card;
+import br.ita.ctc15.poker.misc.AdvancedClientPokerDynamics;
 
 public class Heuristics {
 
